@@ -3,6 +3,7 @@
 A Pygame-based Sudoku game with a solver, three difficulty buttons, and locked clue cells (givens) that are shown in a distinct color.
 
 ## Features
+- Graph-based Sudoku model with backtracking solver and generator.
 - Generate easy/medium/hard puzzles (any solvable puzzle; not necessarily unique).
 - Locked clues that cannot be edited.
 - On-screen activity log and move counter.

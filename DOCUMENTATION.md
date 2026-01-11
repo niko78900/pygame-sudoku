@@ -1,7 +1,7 @@
 # Sudoku Pygame Documentation
 
 ## Overview
-This project is a Pygame Sudoku game split into small modules for clarity. The game generates a solvable puzzle, locks the original clues, and lets the player fill the rest.
+This project is a Pygame Sudoku game split into small modules for clarity. The core emphasis is the use of a graph-based board model and a backtracking algorithm for both solving and puzzle generation.
 
 ## Module Responsibilities
 - `Python_Sudoku.py` Entry point that calls `main.main()`.
@@ -17,14 +17,19 @@ This project is a Pygame Sudoku game split into small modules for clarity. The g
 4. Each frame, UI elements are drawn and the board is checked for a win.
 
 ## Board Model
+- Each cell is a node in a constraint graph; edges connect cells that share a row, column, or 3x3 subgrid.
 - Cell values live in a dict keyed by `(row, col)` with `0` representing empty.
 - `givens` is a set of locked cells that cannot be edited.
-- `is_valid(row, col, num)` enforces row/col/subgrid constraints.
+- `is_valid(row, col, num)` enforces graph constraints by checking neighbor nodes.
 
 ## Puzzle Generation
-- A full valid board is created by randomized backtracking.
+- A full valid board is created by randomized backtracking over the graph constraints.
 - A fixed number of cells are removed based on difficulty.
 - Uniqueness is not enforced; puzzles are guaranteed solvable, not necessarily unique.
+
+## Backtracking Solver
+- The solver is a recursive backtracking search that assigns a number to an empty cell, checks validity via the graph, and recurses.
+- If a dead end is reached, the algorithm backtracks by clearing the last assignment and trying the next candidate.
 
 ## UI Notes
 - Themes live in `config.THEMES` and the default is `config.DEFAULT_THEME` (dark).
