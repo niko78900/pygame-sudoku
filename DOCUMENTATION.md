@@ -8,6 +8,7 @@ This project is a Pygame Sudoku game split into small modules for clarity. The c
 - `main.py` Initializes Pygame, owns the main loop, and handles input and state updates.
 - `sudoku.py` Encapsulates board state, validation rules, the solver, and puzzle generation.
 - `ui.py` Draws the grid, buttons, the console log, and the instructions screen.
+- `scoreboard.py` Loads, validates, and saves leaderboard entries.
 - `config.py` Centralized constants for sizes, colors, and UI layout.
 
 ## Game Flow
@@ -37,6 +38,18 @@ This project is a Pygame Sudoku game split into small modules for clarity. The c
 - Given clues use the theme `given_text` color; user entries use `user_text`.
 - The selected cell outline uses the theme `selected` color.
 - The activity log keeps the most recent messages and drops the oldest beyond the limit.
+- Scores are tracked per placement and shown on the main screen.
+- The Leaderboard button opens the saved scores list.
+
+## Scoring Rules
+- First 9 placements: +2 for correct, -1 for incorrect.
+- Next 9 placements: +4 for correct, -2 for incorrect.
+- Remaining placements: +5 for correct, -3 for incorrect.
+- Solver placements do not affect the score.
+
+## Leaderboard
+- After a puzzle is completed, the player is prompted for a name.
+- Scores are saved in `leaderboard.json` and matching names are updated.
 
 ## Configuration
 Update `config.py` to customize:

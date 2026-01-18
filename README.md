@@ -9,12 +9,14 @@ A Pygame-based Sudoku game with a solver, three difficulty buttons, and locked c
 - On-screen activity log and move counter.
 - Solver button and keyboard shortcut.
 - Dark and light themes (press T to toggle; light default).
+- Score system with a local leaderboard saved to `leaderboard.json`.
 
 ## Project Structure
 - `Python_Sudoku.py` Entry point.
 - `main.py` Game loop and event handling.
 - `sudoku.py` Board logic, solver, and generator.
 - `ui.py` Rendering helpers and instructions screen.
+- `scoreboard.py` Score persistence and leaderboard helpers.
 - `config.py` UI constants, colors, and layout values.
 
 ## Requirements
@@ -50,8 +52,15 @@ python Python_Sudoku.py
 - Press Backspace or 0 to clear a number (if the cell is not a given).
 - Press S to solve the current board.
 - Press T to toggle the theme.
-- Use the buttons for Easy, Medium, Hard, Solve, and Instructions.
+- Use the Leaderboard button to view saved scores.
+- Use the buttons for Easy, Medium, Hard, Solve, Instructions, and Leaderboard.
 - In the Instructions screen, press ESC to return to the game.
+
+## Scoring
+- First 9 placements: +2 for correct, -1 for incorrect.
+- Next 9 placements: +4 for correct, -2 for incorrect.
+- Remaining placements: +5 for correct, -3 for incorrect.
+- Solver placements do not affect the score.
 
 ## Documentation
 - See `DOCUMENTATION.md` for module responsibilities, game flow, and configuration notes.
