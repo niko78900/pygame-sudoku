@@ -16,6 +16,16 @@ BUTTON_START_Y = 150
 INSTRUCTIONS_WIDTH = 800
 INSTRUCTIONS_HEIGHT = 600
 
+LEADERBOARD_WIDTH = 700
+LEADERBOARD_HEIGHT = 520
+LEADERBOARD_MAX_ENTRIES = 10
+
+NAME_PROMPT_WIDTH = 520
+NAME_PROMPT_HEIGHT = 260
+NAME_MAX_LENGTH = 16
+
+SCOREBOARD_FILE = "leaderboard.json"
+
 MAX_CONSOLE_MESSAGES = 100
 CONSOLE_VISIBLE_LINES = 24
 
@@ -26,6 +36,8 @@ CONSOLE_FONT_SIZE = 28
 WINDOW_CAPTION = "Sudoku"
 INSTRUCTIONS_CAPTION = "Instructions"
 ACTIVITY_LOG_TEXT = "Activity Log"
+LEADERBOARD_CAPTION = "Leaderboard"
+NAME_PROMPT_CAPTION = "Save Score"
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -60,6 +72,7 @@ THEMES = {
             "hard": (55, 70, 150),
             "solve": (60, 105, 175),
             "instructions": (38, 55, 85),
+            "leaderboard": (48, 95, 135),
         },
         "shadow": (0, 0, 0, 90),
     },
@@ -83,6 +96,7 @@ THEMES = {
             "hard": (140, 195, 225),
             "solve": (130, 205, 235),
             "instructions": (175, 220, 238),
+            "leaderboard": (160, 212, 236),
         },
         "shadow": (0, 0, 0, 40),
     },

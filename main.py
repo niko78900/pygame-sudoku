@@ -3,8 +3,17 @@ import sys
 import pygame
 
 import config
+import scoreboard
 import ui
 from sudoku import SudokuBoard
+
+
+def score_delta(placement_count, is_correct):
+    if placement_count <= 9:
+        return 2 if is_correct else -1
+    if placement_count <= 18:
+        return 4 if is_correct else -2
+    return 5 if is_correct else -3
 
 
 def main():
@@ -23,6 +32,8 @@ def main():
     board = SudokuBoard()
     selected_cell = None
     move_count = 0
+    placement_count = 0
+    score = 0
     console_messages = []
     win_condition = False
 
@@ -51,6 +62,8 @@ def main():
                         ui.log_message(console_messages, "Failed to generate puzzle.")
                     win_condition = False
                     move_count = 0
+                    placement_count = 0
+                    score = 0
                     selected_cell = None
                 elif buttons["medium"].collidepoint(mouse_pos):
                     console_messages.clear()
@@ -60,6 +73,8 @@ def main():
                         ui.log_message(console_messages, "Failed to generate puzzle.")
                     win_condition = False
                     move_count = 0
+                    placement_count = 0
+                    score = 0
                     selected_cell = None
                 elif buttons["hard"].collidepoint(mouse_pos):
                     console_messages.clear()
@@ -69,6 +84,8 @@ def main():
                         ui.log_message(console_messages, "Failed to generate puzzle.")
                     win_condition = False
                     move_count = 0
+                    placement_count = 0
+                    score = 0
                     selected_cell = None
                 elif buttons["solve"].collidepoint(mouse_pos):
                     if board.solve():
@@ -77,6 +94,9 @@ def main():
                         ui.log_message(console_messages, "No solution found.")
                 elif buttons["instructions"].collidepoint(mouse_pos):
                     screen = ui.render_instructions(screen, fonts, theme)
+                elif buttons["leaderboard"].collidepoint(mouse_pos):
+                    entries = scoreboard.get_leaderboard()
+                    screen = ui.render_leaderboard(screen, fonts, theme, entries)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_t:
@@ -102,9 +122,34 @@ def main():
                         ui.log_message(console_messages, "Cell is locked.")
                     elif board.make_move(row, col, value):
                         move_count += 1
-                        ui.log_message(console_messages, "Move successful!")
+                        if board.has_solution():
+                            placement_count += 1
+                            is_correct = board.get_solution_value(row, col) == value
+                            delta = score_delta(placement_count, is_correct)
+                            score += delta
+                            if is_correct:
+                                ui.log_message(
+                                    console_messages,
+                                    f"Correct move! ({delta:+d} pts)",
+                                )
+                            else:
+                                ui.log_message(
+                                    console_messages,
+                                    f"Incorrect move. ({delta:+d} pts)",
+                                )
+                        else:
+                            ui.log_message(console_messages, "Move successful!")
                     else:
-                        ui.log_message(console_messages, "Invalid move!")
+                        if board.has_solution():
+                            placement_count += 1
+                            delta = score_delta(placement_count, False)
+                            score += delta
+                            ui.log_message(
+                                console_messages,
+                                f"Invalid move. ({delta:+d} pts)",
+                            )
+                        else:
+                            ui.log_message(console_messages, "Invalid move!")
 
                 if selected_cell and event.key in [pygame.K_BACKSPACE, pygame.K_0]:
                     row, col = selected_cell
@@ -121,7 +166,7 @@ def main():
                         ui.log_message(console_messages, "No solution found.")
 
         ui.draw_grid(screen, board, selected_cell, fonts, theme)
-        ui.draw_move_counter(screen, fonts, move_count, theme)
+        ui.draw_move_counter(screen, fonts, move_count, score, theme)
         ui.draw_console(screen, fonts, console_messages, theme)
         ui.draw_buttons(screen, fonts, buttons, theme)
 
@@ -131,6 +176,12 @@ def main():
             ui.log_message(console_messages, "Sudoku!")
             ui.log_message(console_messages, "You've completed the")
             ui.log_message(console_messages, "Congratulations!")
+            screen, player_name = ui.prompt_player_name(screen, fonts, theme, score)
+            if player_name is None:
+                running = False
+                break
+            scoreboard.update_score(player_name, score)
+            ui.log_message(console_messages, f"Score saved for {player_name}.")
             move_count = 0
 
         pygame.display.flip()

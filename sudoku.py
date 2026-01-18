@@ -6,6 +6,7 @@ class SudokuBoard:
         self.graph = {}
         self.values = {}
         self.givens = set()
+        self.solution = {}
         self._create_graph()
 
     def _create_graph(self):
@@ -38,6 +39,7 @@ class SudokuBoard:
         for node in self.values:
             self.values[node] = 0
         self.givens.clear()
+        self.solution.clear()
 
     def get_value(self, row, col):
         return self.values.get((row, col), 0)
@@ -47,6 +49,12 @@ class SudokuBoard:
 
     def is_given(self, row, col):
         return (row, col) in self.givens
+
+    def has_solution(self):
+        return bool(self.solution)
+
+    def get_solution_value(self, row, col):
+        return self.solution.get((row, col), 0)
 
     def is_valid(self, row, col, num):
         node = (row, col)
@@ -111,6 +119,7 @@ class SudokuBoard:
         self.reset()
         if not self._fill_board():
             return False
+        self.solution = dict(self.values)
 
         cells_to_remove = self._cells_to_remove(difficulty)
         all_cells = list(self.values.keys())
