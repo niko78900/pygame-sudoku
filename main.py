@@ -176,12 +176,19 @@ def main():
             ui.log_message(console_messages, "Sudoku!")
             ui.log_message(console_messages, "You've completed the")
             ui.log_message(console_messages, "Congratulations!")
-            screen, player_name = ui.prompt_player_name(screen, fonts, theme, score)
-            if player_name is None:
+            screen, should_save = ui.prompt_save_score(screen, fonts, theme, score)
+            if should_save is None:
                 running = False
                 break
-            scoreboard.update_score(player_name, score)
-            ui.log_message(console_messages, f"Score saved for {player_name}.")
+            if should_save:
+                screen, player_name = ui.prompt_player_name(screen, fonts, theme, score)
+                if player_name is None:
+                    running = False
+                    break
+                scoreboard.update_score(player_name, score)
+                ui.log_message(console_messages, f"Score saved for {player_name}.")
+            else:
+                ui.log_message(console_messages, "Score not saved.")
             move_count = 0
 
         pygame.display.flip()

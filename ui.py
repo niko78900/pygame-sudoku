@@ -331,6 +331,75 @@ def render_instructions(screen, fonts, theme):
                 return screen
 
 
+def prompt_save_score(screen, fonts, theme, score):
+    prompt_window = pygame.display.set_mode(
+        (config.NAME_PROMPT_WIDTH, config.NAME_PROMPT_HEIGHT)
+    )
+    pygame.display.set_caption(config.NAME_PROMPT_CAPTION)
+
+    clock = pygame.time.Clock()
+
+    panel_rect = pygame.Rect(
+        20,
+        20,
+        config.NAME_PROMPT_WIDTH - 40,
+        config.NAME_PROMPT_HEIGHT - 40,
+    )
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
+                pygame.display.set_caption(config.WINDOW_CAPTION)
+                return screen, None
+            if event.type == pygame.KEYDOWN:
+                if event.key in (pygame.K_y, pygame.K_RETURN):
+                    screen = pygame.display.set_mode(
+                        (config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
+                    )
+                    pygame.display.set_caption(config.WINDOW_CAPTION)
+                    return screen, True
+                if event.key in (pygame.K_n, pygame.K_ESCAPE):
+                    screen = pygame.display.set_mode(
+                        (config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
+                    )
+                    pygame.display.set_caption(config.WINDOW_CAPTION)
+                    return screen, False
+
+        prompt_window.fill(theme["background"])
+        draw_shadow(
+            prompt_window,
+            panel_rect,
+            theme["shadow"],
+            config.PANEL_SHADOW_OFFSET,
+            config.PANEL_RADIUS,
+        )
+        draw_panel(
+            prompt_window,
+            panel_rect,
+            theme["panel"],
+            theme["panel_border"],
+            config.PANEL_RADIUS,
+        )
+
+        title = fonts["console"].render("Save your score?", True, theme["text"])
+        prompt_window.blit(title, (panel_rect.x + 20, panel_rect.y + 20))
+
+        score_text = fonts["counter"].render(f"Score: {score}", True, theme["muted_text"])
+        prompt_window.blit(score_text, (panel_rect.x + 20, panel_rect.y + 70))
+
+        info_lines = [
+            "Press Y to save to the leaderboard.",
+            "Press N to skip.",
+        ]
+        for index, line in enumerate(info_lines):
+            info_surface = fonts["counter"].render(line, True, theme["muted_text"])
+            prompt_window.blit(info_surface, (panel_rect.x + 20, panel_rect.y + 120 + index * 28))
+
+        pygame.display.flip()
+        clock.tick(30)
+
+
 def prompt_player_name(screen, fonts, theme, score):
     prompt_window = pygame.display.set_mode(
         (config.NAME_PROMPT_WIDTH, config.NAME_PROMPT_HEIGHT)
@@ -444,7 +513,6 @@ def render_leaderboard(screen, fonts, theme, entries):
         config.LEADERBOARD_WIDTH - 48,
         config.LEADERBOARD_HEIGHT - 48,
     )
-    header_y = panel_rect.y + 20
     line_height = fonts["console"].get_linesize()
 
     while True:
@@ -474,6 +542,7 @@ def render_leaderboard(screen, fonts, theme, entries):
             config.PANEL_RADIUS,
         )
 
+        header_y = panel_rect.y + 20
         title = fonts["console"].render("Leaderboard", True, theme["text"])
         leaderboard_window.blit(title, (panel_rect.x + 20, header_y))
 
