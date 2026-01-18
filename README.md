@@ -61,6 +61,7 @@ python Python_Sudoku.py
 - Next 9 placements: +4 for correct, -2 for incorrect.
 - Remaining placements: +5 for correct, -3 for incorrect.
 - Solver placements do not affect the score.
+- Scores can only be saved after the puzzle is completed (manually or with the solver).
 
 ## Documentation
 - See `DOCUMENTATION.md` for module responsibilities, game flow, and configuration notes.

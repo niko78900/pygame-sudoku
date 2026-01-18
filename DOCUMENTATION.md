@@ -49,6 +49,7 @@ This project is a Pygame Sudoku game split into small modules for clarity. The c
 
 ## Leaderboard
 - After a puzzle is completed, the player is prompted for a name.
+- Completion can be manual or with the solver; only completed puzzles can be saved.
 - Scores are saved in `leaderboard.json` and matching names are updated.
 
 ## Configuration
