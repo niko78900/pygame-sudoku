@@ -30,7 +30,7 @@ ACTIVITY_LOG_TEXT = "Activity Log"
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
-DEFAULT_THEME = "dark"
+DEFAULT_THEME = "light"
 
 GRID_RADIUS = 8
 PANEL_RADIUS = 12

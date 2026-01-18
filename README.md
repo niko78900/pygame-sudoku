@@ -8,7 +8,7 @@ A Pygame-based Sudoku game with a solver, three difficulty buttons, and locked c
 - Locked clues that cannot be edited.
 - On-screen activity log and move counter.
 - Solver button and keyboard shortcut.
-- Dark and light themes (press T to toggle; dark default).
+- Dark and light themes (press T to toggle; light default).
 
 ## Project Structure
 - `Python_Sudoku.py` Entry point.

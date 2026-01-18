@@ -32,7 +32,7 @@ This project is a Pygame Sudoku game split into small modules for clarity. The c
 - If a dead end is reached, the algorithm backtracks by clearing the last assignment and trying the next candidate.
 
 ## UI Notes
-- Themes live in `config.THEMES` and the default is `config.DEFAULT_THEME` (dark).
+- Themes live in `config.THEMES` and the default is `config.DEFAULT_THEME` (light).
 - Press T in-game to toggle between dark and light themes.
 - Given clues use the theme `given_text` color; user entries use `user_text`.
 - The selected cell outline uses the theme `selected` color.
