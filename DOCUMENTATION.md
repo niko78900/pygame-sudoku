@@ -48,6 +48,7 @@ This project is a Pygame Sudoku game split into small modules for clarity. The c
 - Remaining placements: +5 for correct, -6 for incorrect.
 - Solver placements do not affect the score.
 - Completing the puzzle adds a +50 bonus.
+- Correct means the placement does not violate Sudoku rules.
 
 ## Leaderboard
 - After a puzzle is completed, the player is prompted for a name.

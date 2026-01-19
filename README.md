@@ -64,6 +64,7 @@ python Python_Sudoku.py
 - Solver placements do not affect the score.
 - Scores can only be saved after the puzzle is completed (manually or with the solver).
 - Completing the puzzle adds a +50 bonus.
+- Correct means the placement does not violate Sudoku rules.
 
 ## Documentation
 - See `DOCUMENTATION.md` for module responsibilities, game flow, and configuration notes.

@@ -147,19 +147,12 @@ def main():
                                 )
                             else:
                                 placement_count += 1
-                                is_correct = board.get_solution_value(row, col) == value
-                                delta = score_delta(placement_count, is_correct)
+                                delta = score_delta(placement_count, True)
                                 score += delta
-                                if is_correct:
-                                    ui.log_message(
-                                        console_messages,
-                                        f"Correct move! ({delta:+d} pts)",
-                                    )
-                                else:
-                                    ui.log_message(
-                                        console_messages,
-                                        f"Incorrect move. ({delta:+d} pts)",
-                                    )
+                                ui.log_message(
+                                    console_messages,
+                                    f"Valid move! ({delta:+d} pts)",
+                                )
                         else:
                             ui.log_message(console_messages, "Move successful!")
                     else:
