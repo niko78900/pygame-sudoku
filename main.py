@@ -37,6 +37,7 @@ def main():
     placement_count = 0
     score = 0
     last_cleared_values = {}
+    solver_used = False
     console_messages = []
     win_condition = False
 
@@ -68,6 +69,7 @@ def main():
                     placement_count = 0
                     score = 0
                     last_cleared_values.clear()
+                    solver_used = False
                     selected_cell = None
                 elif buttons["medium"].collidepoint(mouse_pos):
                     console_messages.clear()
@@ -80,6 +82,7 @@ def main():
                     placement_count = 0
                     score = 0
                     last_cleared_values.clear()
+                    solver_used = False
                     selected_cell = None
                 elif buttons["hard"].collidepoint(mouse_pos):
                     console_messages.clear()
@@ -92,8 +95,10 @@ def main():
                     placement_count = 0
                     score = 0
                     last_cleared_values.clear()
+                    solver_used = False
                     selected_cell = None
                 elif buttons["solve"].collidepoint(mouse_pos):
+                    solver_used = True
                     if board.solve():
                         ui.log_message(console_messages, "Sudoku solved using solver!")
                     else:
@@ -181,6 +186,7 @@ def main():
                         ui.log_message(console_messages, "Cell is locked.")
 
                 if event.key == pygame.K_s:
+                    solver_used = True
                     if board.solve():
                         ui.log_message(console_messages, "Sudoku solved using solver!")
                     else:
@@ -193,8 +199,9 @@ def main():
 
         if not win_condition and board.check_win():
             win_condition = True
-            score += 50
-            ui.log_message(console_messages, "Completion bonus: +50 pts.")
+            if not solver_used:
+                score += 50
+                ui.log_message(console_messages, "Completion bonus: +50 pts.")
             ui.log_message(console_messages, f"Total moves made: {move_count}")
             ui.log_message(console_messages, "Sudoku!")
             ui.log_message(console_messages, "You've completed the")
