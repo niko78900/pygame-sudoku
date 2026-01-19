@@ -40,13 +40,15 @@ def save_scores(entries):
 
 
 def update_score(name, score):
+    normalized = name.lower()
     entries = load_scores()
     for entry in entries:
-        if entry["name"] == name:
+        if entry["name"].lower() == normalized:
+            entry["name"] = normalized
             entry["score"] = score
             save_scores(entries)
             return entries
-    entries.append({"name": name, "score": score})
+    entries.append({"name": normalized, "score": score})
     save_scores(entries)
     return entries
 
