@@ -138,34 +138,28 @@ def main():
                         )
                     elif board.make_move(row, col, value):
                         move_count += 1
-                        if board.has_solution():
-                            repeat_value = last_cleared_values.get((row, col)) == value
-                            if repeat_value:
-                                ui.log_message(
-                                    console_messages,
-                                    "Move recorded (no score for repeat).",
-                                )
-                            else:
-                                placement_count += 1
-                                delta = score_delta(placement_count, True)
-                                score += delta
-                                ui.log_message(
-                                    console_messages,
-                                    f"Valid move! ({delta:+d} pts)",
-                                )
+                        repeat_value = last_cleared_values.get((row, col)) == value
+                        if repeat_value:
+                            ui.log_message(
+                                console_messages,
+                                "Move recorded (no score for repeat).",
+                            )
                         else:
-                            ui.log_message(console_messages, "Move successful!")
-                    else:
-                        if board.has_solution():
                             placement_count += 1
-                            delta = score_delta(placement_count, False)
+                            delta = score_delta(placement_count, True)
                             score += delta
                             ui.log_message(
                                 console_messages,
-                                f"Invalid move. ({delta:+d} pts)",
+                                f"Valid move! ({delta:+d} pts)",
                             )
-                        else:
-                            ui.log_message(console_messages, "Invalid move!")
+                    else:
+                        placement_count += 1
+                        delta = score_delta(placement_count, False)
+                        score += delta
+                        ui.log_message(
+                            console_messages,
+                            f"Invalid move. ({delta:+d} pts)",
+                        )
 
                 if selected_cell and event.key in [pygame.K_BACKSPACE, pygame.K_0]:
                     row, col = selected_cell
