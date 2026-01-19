@@ -3,19 +3,10 @@ import sys
 import pygame
 
 import config
+import scoring
 import scoreboard
 import ui
 from sudoku import SudokuBoard
-
-
-def score_delta(placement_count, is_correct):
-    if placement_count <= 10:
-        return 2 if is_correct else -1
-    if placement_count <= 20:
-        return 4 if is_correct else -2
-    if placement_count <= 30:
-        return 5 if is_correct else -3
-    return 5 if is_correct else -6
 
 
 def main():
@@ -34,10 +25,7 @@ def main():
     board = SudokuBoard()
     selected_cell = None
     move_count = 0
-    placement_count = 0
-    score = 0
-    last_cleared_values = {}
-    solver_used = False
+    tracker = scoring.ScoreTracker()
     console_messages = []
     win_condition = False
 
@@ -66,10 +54,7 @@ def main():
                         ui.log_message(console_messages, "Failed to generate puzzle.")
                     win_condition = False
                     move_count = 0
-                    placement_count = 0
-                    score = 0
-                    last_cleared_values.clear()
-                    solver_used = False
+                    tracker.reset()
                     selected_cell = None
                 elif buttons["medium"].collidepoint(mouse_pos):
                     console_messages.clear()
@@ -79,10 +64,7 @@ def main():
                         ui.log_message(console_messages, "Failed to generate puzzle.")
                     win_condition = False
                     move_count = 0
-                    placement_count = 0
-                    score = 0
-                    last_cleared_values.clear()
-                    solver_used = False
+                    tracker.reset()
                     selected_cell = None
                 elif buttons["hard"].collidepoint(mouse_pos):
                     console_messages.clear()
@@ -92,14 +74,11 @@ def main():
                         ui.log_message(console_messages, "Failed to generate puzzle.")
                     win_condition = False
                     move_count = 0
-                    placement_count = 0
-                    score = 0
-                    last_cleared_values.clear()
-                    solver_used = False
+                    tracker.reset()
                     selected_cell = None
                 elif buttons["solve"].collidepoint(mouse_pos):
                     if board.solve():
-                        solver_used = True
+                        tracker.mark_solver_solved()
                         ui.log_message(console_messages, "Sudoku solved using solver!")
                     else:
                         ui.log_message(console_messages, "No solution found.")
@@ -138,24 +117,19 @@ def main():
                         )
                     elif board.make_move(row, col, value):
                         move_count += 1
-                        repeat_value = last_cleared_values.get((row, col)) == value
-                        if repeat_value:
+                        delta, scored = tracker.record_valid_move(row, col, value)
+                        if not scored:
                             ui.log_message(
                                 console_messages,
                                 "Move recorded (no score for repeat).",
                             )
                         else:
-                            placement_count += 1
-                            delta = score_delta(placement_count, True)
-                            score += delta
                             ui.log_message(
                                 console_messages,
                                 f"Valid move! ({delta:+d} pts)",
                             )
                     else:
-                        placement_count += 1
-                        delta = score_delta(placement_count, False)
-                        score += delta
+                        delta = tracker.record_invalid_move()
                         ui.log_message(
                             console_messages,
                             f"Invalid move. ({delta:+d} pts)",
@@ -166,43 +140,46 @@ def main():
                     previous_value = board.get_value(row, col)
                     if board.clear_value(row, col):
                         move_count += 1
-                        if previous_value != 0:
-                            last_cleared_values[(row, col)] = previous_value
+                        tracker.record_clear(row, col, previous_value)
                         ui.log_message(console_messages, "Cell cleared!")
                     else:
                         ui.log_message(console_messages, "Cell is locked.")
 
                 if event.key == pygame.K_s:
                     if board.solve():
-                        solver_used = True
+                        tracker.mark_solver_solved()
                         ui.log_message(console_messages, "Sudoku solved using solver!")
                     else:
                         ui.log_message(console_messages, "No solution found.")
 
         ui.draw_grid(screen, board, selected_cell, fonts, theme)
-        ui.draw_move_counter(screen, fonts, move_count, score, theme)
+        ui.draw_move_counter(screen, fonts, move_count, tracker.score, theme)
         ui.draw_console(screen, fonts, console_messages, theme)
         ui.draw_buttons(screen, fonts, buttons, theme)
 
         if not win_condition and board.check_win():
             win_condition = True
-            if not solver_used:
-                score += 50
+            bonus = tracker.apply_completion_bonus()
+            if bonus:
                 ui.log_message(console_messages, "Completion bonus: +50 pts.")
             ui.log_message(console_messages, f"Total moves made: {move_count}")
             ui.log_message(console_messages, "Sudoku!")
             ui.log_message(console_messages, "You've completed the")
             ui.log_message(console_messages, "Congratulations!")
-            screen, should_save = ui.prompt_save_score(screen, fonts, theme, score)
+            screen, should_save = ui.prompt_save_score(
+                screen, fonts, theme, tracker.score
+            )
             if should_save is None:
                 running = False
                 break
             if should_save:
-                screen, player_name = ui.prompt_player_name(screen, fonts, theme, score)
+                screen, player_name = ui.prompt_player_name(
+                    screen, fonts, theme, tracker.score
+                )
                 if player_name is None:
                     running = False
                     break
-                scoreboard.update_score(player_name, score)
+                scoreboard.update_score(player_name, tracker.score)
                 ui.log_message(console_messages, f"Score saved for {player_name}.")
             else:
                 ui.log_message(console_messages, "Score not saved.")

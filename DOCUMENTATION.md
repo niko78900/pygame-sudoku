@@ -55,6 +55,10 @@ This project is a Pygame Sudoku game split into small modules for clarity. The c
 - Completion can be manual or with the solver; only completed puzzles can be saved.
 - Scores are saved in `leaderboard.json` and matching names are updated.
 
+## Tests
+- Scoring unit tests live in `tests/test_scoring.py`.
+- Run them with `python -m unittest tests.test_scoring`.
+
 ## Configuration
 Update `config.py` to customize:
 - Window and grid sizes

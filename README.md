@@ -69,6 +69,10 @@ python Python_Sudoku.py
 ## Documentation
 - See `DOCUMENTATION.md` for module responsibilities, game flow, and configuration notes.
 
+## Tests
+- Scoring unit tests live in `tests/test_scoring.py`.
+- Run them with `python -m unittest tests.test_scoring`.
+
 ## Notes
 - Starting a new game always resets the board and clears prior user input.
 - Given cells are locked and displayed in a darker color.
