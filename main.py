@@ -98,8 +98,8 @@ def main():
                     solver_used = False
                     selected_cell = None
                 elif buttons["solve"].collidepoint(mouse_pos):
-                    solver_used = True
                     if board.solve():
+                        solver_used = True
                         ui.log_message(console_messages, "Sudoku solved using solver!")
                     else:
                         ui.log_message(console_messages, "No solution found.")
@@ -186,8 +186,8 @@ def main():
                         ui.log_message(console_messages, "Cell is locked.")
 
                 if event.key == pygame.K_s:
-                    solver_used = True
                     if board.solve():
+                        solver_used = True
                         ui.log_message(console_messages, "Sudoku solved using solver!")
                     else:
                         ui.log_message(console_messages, "No solution found.")
