@@ -57,11 +57,13 @@ python Python_Sudoku.py
 - In the Instructions screen, press ESC to return to the game.
 
 ## Scoring
-- First 9 placements: +2 for correct, -1 for incorrect.
-- Next 9 placements: +4 for correct, -2 for incorrect.
-- Remaining placements: +5 for correct, -3 for incorrect.
+- First 10 placements: +2 for correct, -1 for incorrect.
+- Next 10 placements: +4 for correct, -2 for incorrect.
+- Next 10 placements: +5 for correct, -3 for incorrect.
+- Remaining placements: +5 for correct, -6 for incorrect.
 - Solver placements do not affect the score.
 - Scores can only be saved after the puzzle is completed (manually or with the solver).
+- Completing the puzzle adds a +50 bonus.
 
 ## Documentation
 - See `DOCUMENTATION.md` for module responsibilities, game flow, and configuration notes.

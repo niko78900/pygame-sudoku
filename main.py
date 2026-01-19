@@ -9,11 +9,13 @@ from sudoku import SudokuBoard
 
 
 def score_delta(placement_count, is_correct):
-    if placement_count <= 9:
+    if placement_count <= 10:
         return 2 if is_correct else -1
-    if placement_count <= 18:
+    if placement_count <= 20:
         return 4 if is_correct else -2
-    return 5 if is_correct else -3
+    if placement_count <= 30:
+        return 5 if is_correct else -3
+    return 5 if is_correct else -6
 
 
 def main():
@@ -191,6 +193,8 @@ def main():
 
         if not win_condition and board.check_win():
             win_condition = True
+            score += 50
+            ui.log_message(console_messages, "Completion bonus: +50 pts.")
             ui.log_message(console_messages, f"Total moves made: {move_count}")
             ui.log_message(console_messages, "Sudoku!")
             ui.log_message(console_messages, "You've completed the")

@@ -42,10 +42,12 @@ This project is a Pygame Sudoku game split into small modules for clarity. The c
 - The Leaderboard button opens the saved scores list.
 
 ## Scoring Rules
-- First 9 placements: +2 for correct, -1 for incorrect.
-- Next 9 placements: +4 for correct, -2 for incorrect.
-- Remaining placements: +5 for correct, -3 for incorrect.
+- First 10 placements: +2 for correct, -1 for incorrect.
+- Next 10 placements: +4 for correct, -2 for incorrect.
+- Next 10 placements: +5 for correct, -3 for incorrect.
+- Remaining placements: +5 for correct, -6 for incorrect.
 - Solver placements do not affect the score.
+- Completing the puzzle adds a +50 bonus.
 
 ## Leaderboard
 - After a puzzle is completed, the player is prompted for a name.
