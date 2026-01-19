@@ -34,6 +34,7 @@ def main():
     move_count = 0
     placement_count = 0
     score = 0
+    last_cleared_values = {}
     console_messages = []
     win_condition = False
 
@@ -64,6 +65,7 @@ def main():
                     move_count = 0
                     placement_count = 0
                     score = 0
+                    last_cleared_values.clear()
                     selected_cell = None
                 elif buttons["medium"].collidepoint(mouse_pos):
                     console_messages.clear()
@@ -75,6 +77,7 @@ def main():
                     move_count = 0
                     placement_count = 0
                     score = 0
+                    last_cleared_values.clear()
                     selected_cell = None
                 elif buttons["hard"].collidepoint(mouse_pos):
                     console_messages.clear()
@@ -86,6 +89,7 @@ def main():
                     move_count = 0
                     placement_count = 0
                     score = 0
+                    last_cleared_values.clear()
                     selected_cell = None
                 elif buttons["solve"].collidepoint(mouse_pos):
                     if board.solve():
@@ -120,23 +124,35 @@ def main():
                     value = event.key - pygame.K_0
                     if board.is_given(row, col):
                         ui.log_message(console_messages, "Cell is locked.")
+                    elif board.get_value(row, col) != 0:
+                        ui.log_message(
+                            console_messages,
+                            "Cell already filled. Press backspace to clear.",
+                        )
                     elif board.make_move(row, col, value):
                         move_count += 1
                         if board.has_solution():
-                            placement_count += 1
-                            is_correct = board.get_solution_value(row, col) == value
-                            delta = score_delta(placement_count, is_correct)
-                            score += delta
-                            if is_correct:
+                            repeat_value = last_cleared_values.get((row, col)) == value
+                            if repeat_value:
                                 ui.log_message(
                                     console_messages,
-                                    f"Correct move! ({delta:+d} pts)",
+                                    "Move recorded (no score for repeat).",
                                 )
                             else:
-                                ui.log_message(
-                                    console_messages,
-                                    f"Incorrect move. ({delta:+d} pts)",
-                                )
+                                placement_count += 1
+                                is_correct = board.get_solution_value(row, col) == value
+                                delta = score_delta(placement_count, is_correct)
+                                score += delta
+                                if is_correct:
+                                    ui.log_message(
+                                        console_messages,
+                                        f"Correct move! ({delta:+d} pts)",
+                                    )
+                                else:
+                                    ui.log_message(
+                                        console_messages,
+                                        f"Incorrect move. ({delta:+d} pts)",
+                                    )
                         else:
                             ui.log_message(console_messages, "Move successful!")
                     else:
@@ -153,8 +169,11 @@ def main():
 
                 if selected_cell and event.key in [pygame.K_BACKSPACE, pygame.K_0]:
                     row, col = selected_cell
+                    previous_value = board.get_value(row, col)
                     if board.clear_value(row, col):
                         move_count += 1
+                        if previous_value != 0:
+                            last_cleared_values[(row, col)] = previous_value
                         ui.log_message(console_messages, "Cell cleared!")
                     else:
                         ui.log_message(console_messages, "Cell is locked.")
